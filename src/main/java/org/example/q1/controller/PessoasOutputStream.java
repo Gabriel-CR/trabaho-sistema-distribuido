@@ -12,7 +12,6 @@ import java.util.Objects;
 public class PessoasOutputStream extends OutputStream {
     private PessoasOutputStreamView pessoaView;
     private final int SERVER_PORT = 7869;
-    private final String IP = "localhost";
     private Pessoa[] pessoas;
 
     public PessoasOutputStream(Pessoa[] pessoas, OutputStream outputStream) {
