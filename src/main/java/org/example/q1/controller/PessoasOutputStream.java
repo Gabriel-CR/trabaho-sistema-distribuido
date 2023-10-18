@@ -1,7 +1,7 @@
 package org.example.q1.controller;
 
 import org.example.q1.model.Pessoa;
-import org.example.q1.view.PessoaView;
+import org.example.q1.view.PessoasOutputStreamView;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -10,21 +10,21 @@ import java.net.Socket;
 import java.util.Objects;
 
 public class PessoasOutputStream extends OutputStream {
-    private PessoaView pessoaView;
+    private PessoasOutputStreamView pessoaView;
     private final int SERVER_PORT = 7869;
     private final String IP = "localhost";
     private Pessoa[] pessoas;
 
     public PessoasOutputStream(Pessoa[] pessoas, OutputStream outputStream) {
         this.pessoas = pessoas;
-        this.pessoaView = new PessoaView(outputStream);
+        this.pessoaView = new PessoasOutputStreamView(outputStream);
     }
 
     public void writeTCP() {
         // envia os dados de um conjunto (array) de Pessoas
         try{
             System.out.println("Aguardando conexão...");
-            ServerSocket listenSocket = new ServerSocket(7896);
+            ServerSocket listenSocket = new ServerSocket(SERVER_PORT);
 
             while (true) {
                 Socket clientSocket = listenSocket.accept();

@@ -5,10 +5,10 @@ import org.example.q1.model.Pessoa;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-public class PessoaView {
+public class PessoasOutputStreamView {
     private OutputStream outputStream;
 
-    public PessoaView(OutputStream outputStream) {
+    public PessoasOutputStreamView(OutputStream outputStream) {
         this.outputStream = outputStream;
     }
 
