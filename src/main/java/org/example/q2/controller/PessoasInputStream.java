@@ -59,6 +59,11 @@ public class PessoasInputStream extends InputStream {
         return pessoas;
     }
 
+    public Pessoa[] readFile() {
+        // TODO
+        return null;
+    }
+
     @Override
     public int read() throws IOException {
         return 0;

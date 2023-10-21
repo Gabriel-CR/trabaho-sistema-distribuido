@@ -27,4 +27,9 @@ public class PessoasInputStreamView {
 
         return new Pessoa(nome, cpf, idade);
     }
+
+    public Pessoa readDataPeopleFile(String filePath) {
+        // TODO
+        return null;
+    }
 }
