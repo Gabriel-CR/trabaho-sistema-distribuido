@@ -35,10 +35,8 @@ public class Banco {
 
         sb.append("Agências:\n");
         for (Map.Entry<String, AgenciaBancaria> entry : agencias.entrySet()) {
-//            String agenciaId = entry.getKey();
             AgenciaBancaria agencia = entry.getValue();
 
-//            sb.append("\tID da Agência: ").append(agenciaId).append('\n');
             sb.append(agencia.toString()); // Chama o método toString da classe AgenciaBancaria
         }
 
