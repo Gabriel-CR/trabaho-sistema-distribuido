@@ -1,6 +1,5 @@
 package org.example.q3.controller;
 
-import org.example.q3.controller.Connection;
 import org.example.q3.model.Banco;
 
 import java.io.IOException;

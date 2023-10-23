@@ -19,8 +19,8 @@ public class AgenciaBancaria {
         }};
     }
 
-    public String getNome() {
-        return nome;
+    public void deposito(String contaId, Double valor) {
+        this.contas.get(contaId).deposito(valor);
     }
 
     public void adicionarConta(Conta conta) {
@@ -31,8 +31,8 @@ public class AgenciaBancaria {
         return contas;
     }
 
-    public void deposito(String contaId, Double valor) {
-        this.contas.get(contaId).deposito(valor);
+    public String getNome() {
+        return nome;
     }
 
     @Override
