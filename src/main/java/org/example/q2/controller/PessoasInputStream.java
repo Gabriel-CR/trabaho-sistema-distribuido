@@ -32,6 +32,8 @@ public class PessoasInputStream extends InputStream {
             DataOutputStream out = new DataOutputStream(socketRead.getOutputStream());
             DataInputStream in = new DataInputStream(socketRead.getInputStream());
 
+            // TODO: enviar o número de pessoas que serão cadastradas
+
             // envia os dados para o servidor
             pessoas = new Pessoa[1];
             pessoas[0] = pessoasInputStreamView.readDataPeople();

@@ -3,12 +3,12 @@ package org.example.q3.model;
 import org.example.q1.model.Pessoa;
 
 public class Conta implements OperacoesBancarias {
-    private int numeroConta;
-    private Pessoa titularConta;
+    private String numeroConta;
+    private String titularConta;
     private Double saldo;
     private Double taxaJuros;
 
-    public Conta(int numeroConta, Pessoa titularConta, Double saldo, Double taxaJuros) {
+    public Conta(String numeroConta, String titularConta, Double saldo, Double taxaJuros) {
         this.numeroConta = numeroConta;
         this.titularConta = titularConta;
         this.saldo = saldo;
@@ -17,7 +17,7 @@ public class Conta implements OperacoesBancarias {
 
     @Override
     public void deposito(Double valor) {
-        // TODO
+        this.saldo += valor;
     }
 
     @Override
@@ -44,5 +44,22 @@ public class Conta implements OperacoesBancarias {
     @Override
     public void encerrarConta(Conta conta) {
         // TODO
+    }
+
+    public String getNumeroConta() {
+        return numeroConta;
+    }
+
+    @Override
+    public String toString() {
+        return "numero: " + numeroConta + ", nome: " + titularConta + ", saldo: R$" + saldo;
+    }
+
+    public String getTitularConta() {
+        return titularConta;
+    }
+
+    public Double getSaldo() {
+        return saldo;
     }
 }
