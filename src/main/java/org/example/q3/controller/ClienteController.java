@@ -23,9 +23,9 @@ public class ClienteController {
                 if (opcao.equals("1")) { // deposito
                     deposito();
                 } else if (opcao.equals("2")) { // saque
-                    saldo();
-                } else if (opcao.equals("3")) { // saldo
                     System.out.println("TODO");
+                } else if (opcao.equals("3")) { // saldo
+                    saldo();
                 } else if (opcao.equals("4")) { // taxa de juros
                     System.out.println("TODO");
                 } else if (opcao.equals("5")) { // calcular juros
@@ -46,6 +46,12 @@ public class ClienteController {
         }
     }
 
+    /*
+     * Faz o depósito de um valor em uma conta
+     * Usa a view para receber os valores
+     * Faz um único envio de dados para o servidor e recebe uma resposta
+     *      Envia para o servidor uma string separada por ';' com todos os dados necessários para a operação
+     */
     public void deposito() {
         Socket socket = null;
         try {
@@ -57,14 +63,23 @@ public class ClienteController {
             String agencia = clienteView.getAgenciaForUser();
             String conta = clienteView.getContaForUser();
             Double valor = clienteView.getValorForUser();
+            /*
+             * Envia dados para uma operação no servidor
+             * O primeiro argumento é a operação a ser feita
+             * Os outros argumentos são os dados necessários para a operação
+             */
             out.writeUTF("deposito;" + agencia + ";" + conta + ";" + valor);
 
             System.out.println(in.readUTF());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao criar socket");
         }
     }
 
+    /*
+     * Verifica o saldo de uma conta
+     * Usa a view para receber os valores
+     */
     public void saldo() {
         Socket socket = null;
         try {
@@ -73,14 +88,13 @@ public class ClienteController {
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             DataInputStream in = new DataInputStream(socket.getInputStream());
 
-            out.writeUTF("oi");
-            if (in.readUTF() == null) {
-                System.out.println("Depósito de R$" + 10 + " realizado com sucesso");
-            }  else {
-                System.out.println("Erro ao selecionar opcao");
-            }
+            String agencia = clienteView.getAgenciaForUser();
+            String conta = clienteView.getContaForUser();
+            out.writeUTF("saldo;" + agencia + ";" + conta);
+
+            System.out.println(in.readUTF());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao criar socket");
         }
     }
 

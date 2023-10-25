@@ -26,6 +26,16 @@ public class Banco {
         }
     }
 
+    public String saldo(String agenciaId, String contaId) {
+        var agencia = this.agencias.get(agenciaId);
+
+        if (agencia != null) {
+            return agencia.saldo(contaId);
+        } else {
+            return "Agencia " + agenciaId + " não encontrada";
+        }
+    }
+
     public void adicionarAgencia(AgenciaBancaria agencia) {
         agencias.put(agencia.getNome(), agencia);
     }

@@ -36,6 +36,11 @@ public class Connection extends Thread {
                 Double valor = Double.valueOf(operacao[3]);
                 String response = serverController.deposito(agencia, conta, valor);
                 out.writeUTF(response);
+            } else if (operacao[0].equals("saldo")) {
+                String agencia = operacao[1];
+                String conta = operacao[2];
+                String response = serverController.saldo(agencia, conta);
+                out.writeUTF(response);
             } else if (operacao[0].equals("dados")) {
                 System.out.println(serverController);
             } else {

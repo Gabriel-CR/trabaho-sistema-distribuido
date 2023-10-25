@@ -6,6 +6,11 @@ public class ClienteView {
     public ClienteView() {
     }
 
+    /*
+     * Menu de opções que o código faz
+     * Dispara um Exception caso o usuário digite um valor incorreto
+     *      Ex: o valor deve ser um número e o usuário digita uma letra
+     */
     public String getOpcaoMenu() throws Exception {
         try {
             Scanner scanner = new Scanner(System.in);
@@ -26,6 +31,10 @@ public class ClienteView {
         }
     }
 
+    /*
+     * Recebe o valor em dinheiro do usuário
+     * Dispara uma Exception caso o usuário digite um valor fora do esperado
+     */
     public Double getValorForUser() throws Exception {
         try {
             Scanner scanner = new Scanner(System.in);

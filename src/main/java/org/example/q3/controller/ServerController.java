@@ -33,6 +33,10 @@ public class ServerController {
         return this.banco.deposito(agenciaId, contaId, valor);
     }
 
+    public String saldo(String agenciaId, String contaId) {
+        return this.banco.saldo(agenciaId, contaId);
+    }
+
     @Override
     public String toString() {
         return banco.toString();

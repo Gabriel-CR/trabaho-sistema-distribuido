@@ -30,6 +30,16 @@ public class AgenciaBancaria {
         }
     }
 
+    public String saldo(String contaId) {
+        var conta = this.contas.get(contaId);
+
+        if (conta != null) {
+            return "Seu saldo é de R$" + conta.getSaldo();
+        } else {
+            return "Conta " + contaId + " não encontrada";
+        }
+    }
+
     public void adicionarConta(Conta conta) {
         contas.put(conta.getNumeroConta(), conta);
     }
@@ -60,5 +70,4 @@ public class AgenciaBancaria {
 
         return sb.toString();
     }
-
 }
