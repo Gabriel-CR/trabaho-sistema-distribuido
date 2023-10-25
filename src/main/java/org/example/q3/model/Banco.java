@@ -16,8 +16,14 @@ public class Banco {
         }};
     }
 
-    public void deposito(String agenciaId, String contaId, Double valor) {
-        this.agencias.get(agenciaId).deposito(contaId, valor);
+    public String deposito(String agenciaId, String contaId, Double valor) {
+        var agencia = this.agencias.get(agenciaId);
+
+        if (agencia != null) {
+            return agencia.deposito(contaId, valor);
+        } else {
+            return "Agencia " + agenciaId + " não encontrada";
+        }
     }
 
     public void adicionarAgencia(AgenciaBancaria agencia) {

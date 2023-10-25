@@ -29,10 +29,8 @@ public class ServerController {
         }
     }
 
-    public void deposito(String agenciaId, String contaId, Double valor) {
-        this.banco.deposito(agenciaId, contaId, valor);
-        // TODO: retorna um valor de sucesso/erro para o cliente
-        System.out.println("depósito concluído");
+    public String deposito(String agenciaId, String contaId, Double valor) {
+        return this.banco.deposito(agenciaId, contaId, valor);
     }
 
     @Override

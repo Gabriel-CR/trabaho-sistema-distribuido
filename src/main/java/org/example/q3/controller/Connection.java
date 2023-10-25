@@ -28,17 +28,19 @@ public class Connection extends Thread {
         try { // an echo server
             System.out.println("Aguardando dados...");
 
-            String operacao = in.readUTF(); // read a line of data from the stream
+            String[] operacao = in.readUTF().split(";"); // read a line of data from the stream
 
-            if (operacao.equals("deposito")) {
-                String agencia = in.readUTF();
-                String conta = in.readUTF();
-                Double valor = in.readDouble();
-                serverController.deposito(agencia, conta, valor);
-            } else if (operacao.equals("dados")) {
+            if (operacao[0].equals("deposito")) {
+                String agencia = operacao[1];
+                String conta = operacao[2];
+                Double valor = Double.valueOf(operacao[3]);
+                String response = serverController.deposito(agencia, conta, valor);
+                out.writeUTF(response);
+            } else if (operacao[0].equals("dados")) {
                 System.out.println(serverController);
             } else {
                 System.out.println("Operação inválida");
+                out.writeUTF("Operação inválida");
             }
         } catch (EOFException e) {
             System.out.println("EOF:" + e.getMessage());

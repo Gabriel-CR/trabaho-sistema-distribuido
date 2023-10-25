@@ -19,8 +19,15 @@ public class AgenciaBancaria {
         }};
     }
 
-    public void deposito(String contaId, Double valor) {
-        this.contas.get(contaId).deposito(valor);
+    public String deposito(String contaId, Double valor) {
+        var conta = this.contas.get(contaId);
+
+        if (conta != null) {
+            conta.deposito(valor);
+            return "Depósito de R$" + valor + " realizado com sucesso";
+        } else {
+            return "Conta " + contaId + " não encontrada";
+        }
     }
 
     public void adicionarConta(Conta conta) {

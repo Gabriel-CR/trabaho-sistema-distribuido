@@ -6,6 +6,26 @@ public class ClienteView {
     public ClienteView() {
     }
 
+    public String getOpcaoMenu() throws Exception {
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("ESCOLHA UMA OPÇÃO");
+            System.out.println("[1] deposito\n" +
+                    "[2] saque\n" +
+                    "[3] saldo\n" +
+                    "[4] verificar taxa de juros\n" +
+                    "[5] calcular juros\n" +
+                    "[6] transferir\n" +
+                    "[7] encerrar conta\n" +
+                    "[q] sair");
+            System.out.print("Sua escolha: ");
+            String opcao = scanner.nextLine();
+            return opcao;
+        } catch (Exception exception) {
+            throw new Exception("Erro ao ler opção de operação");
+        }
+    }
+
     public Double getValorForUser() throws Exception {
         try {
             Scanner scanner = new Scanner(System.in);
@@ -17,14 +37,14 @@ public class ClienteView {
         }
     }
 
-    public String getBancoForUser() throws Exception {
+    public String getContaForUser() throws Exception {
         try {
             Scanner scanner = new Scanner(System.in);
-            System.out.print("Digite o banco: ");
+            System.out.print("Digite a conta: ");
             String banco = scanner.nextLine();
             return banco;
         } catch (Exception exception) {
-            throw new Exception("Erro ao ler nome do banco");
+            throw new Exception("Erro ao ler nome da conta");
         }
     }
 
