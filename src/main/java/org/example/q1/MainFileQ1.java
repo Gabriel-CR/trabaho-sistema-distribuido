@@ -6,10 +6,11 @@ import org.example.q1.model.Pessoa;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class MainQ1 {
+public class MainFileQ1 {
     public static void main(String[] args) throws IOException {
         Pessoa[] pessoas = new Pessoa[1];
-        PessoasOutputStream pos = new PessoasOutputStream(pessoas, System.out);
+        FileOutputStream outputStream = new FileOutputStream("./saida.txt");
+        PessoasOutputStream pos = new PessoasOutputStream(pessoas, outputStream);
         pos.writeTCP();
         pos.close();
     }

@@ -26,6 +26,7 @@ public class PessoasOutputStream extends OutputStream {
             ServerSocket listenSocket = new ServerSocket(SERVER_PORT);
 
             while (true) {
+                // TODO: zerar as pessoas antes de salvar no arquivo
                 Socket clientSocket = listenSocket.accept();
 
                 System.out.println("Conexão estabelecida com: "+clientSocket.getInetAddress().getHostAddress());
@@ -72,6 +73,5 @@ public class PessoasOutputStream extends OutputStream {
 
     @Override
     public void write(int b) throws IOException {
-        // TODO
     }
 }

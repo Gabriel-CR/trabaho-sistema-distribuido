@@ -12,20 +12,45 @@ public class PessoasInputStreamView {
         this.inputStream = inputStream;
     }
 
-    public Pessoa readDataPeople() {
+    public int readQuantityPeople() {
         Scanner inScanner = new Scanner(inputStream);
 
-        System.out.println("Informe seus dados...");
-        System.out.print("Nome: ");
-        String nome = inScanner.nextLine();
-        System.out.print("CPF: ");
-        String cpf = inScanner.nextLine();
-        System.out.print("Idade: ");
-        int idade = inScanner.nextInt();
+        // ler a quantidade de pessoas
+        int quantidadeDePessoas = inScanner.nextInt();
+
+        inScanner.close();
+        return quantidadeDePessoas;
+    }
+
+    public Pessoa[] readDataPeople() {
+        Scanner inScanner = new Scanner(inputStream);
+        Pessoa[] pessoas;
+
+        // ler a quantidade de pessoas
+        int quantidadeDePessoas = inScanner.nextInt();
+        pessoas = new Pessoa[quantidadeDePessoas];
+
+        inScanner.nextLine(); // Consuma a quebra de linha após a leitura do número de pessoas.
+
+        for (int i = 0; i < quantidadeDePessoas; i++) {
+            System.out.println("Informe seus dados...");
+            System.out.print("Nome: ");
+            String nome = inScanner.nextLine();
+            System.out.print("CPF: ");
+            String cpf = inScanner.nextLine();
+            System.out.print("Idade: ");
+            int idade = inScanner.nextInt();
+
+            if (i < quantidadeDePessoas - 1) {
+                inScanner.nextLine(); // Consuma a quebra de linha após a leitura da idade.
+            }
+
+            pessoas[i] = new Pessoa(nome, cpf, idade);
+        }
 
         inScanner.close();
 
-        return new Pessoa(nome, cpf, idade);
+        return pessoas;
     }
 
     public Pessoa readDataPeopleFile(String filePath) {

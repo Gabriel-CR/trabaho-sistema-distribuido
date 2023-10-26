@@ -1,0 +1,30 @@
+Quantidade de pessoas: 1
+---------------------------------
+nomePessoa: gabriel
+cpf: 12312312300
+idade: 20
+---------------------------------
+Quantidade de pessoas: 2
+---------------------------------
+nomePessoa: gabriel
+cpf: 12312312300
+idade: 20
+---------------------------------
+nomePessoa: carlos
+cpf: 11111111100
+idade: 21
+---------------------------------
+Quantidade de pessoas: 3
+---------------------------------
+nomePessoa: gabriel
+cpf: 12312312300
+idade: 20
+---------------------------------
+nomePessoa: carlos
+cpf: 11111111100
+idade: 21
+---------------------------------
+nomePessoa: carlos
+cpf: 11111111100
+idade: 21
+---------------------------------

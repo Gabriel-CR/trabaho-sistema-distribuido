@@ -30,27 +30,29 @@ public class Connection extends Thread {
         try { // an echo server
             System.out.println("Aguardando dados...");
 
-            String data = in.readUTF(); // read a line of data from the stream
+            int quantidade = in.readInt();
 
-            //separar os dados
-            String[] dados = data.split("\n");
-            String nome = dados[0];
-            String cpf = dados[1];
-            int idade = Integer.parseInt(dados[2]);
+            for (int i = 0; i < quantidade; i++) {
+                String data = in.readUTF(); // read a line of data from the stream
 
-            // armazenar os dados em um objeto Pessoa
-            Pessoa pessoa = new Pessoa(nome, cpf, idade);
+                //separar os dados
+                String[] dados = data.split(";");
+                String nome = dados[0];
+                String cpf = dados[1];
+                int idade = Integer.parseInt(dados[2]);
 
-            // adicionar o objeto Pessoa ao array de Pessoas
-            pessoas.add(pessoa);
+                // armazenar os dados em um objeto Pessoa
+                Pessoa pessoa = new Pessoa(nome, cpf, idade);
 
-            // imprimir o array de Pessoas
-            pessoas.showPeoples();
+                // adicionar o objeto Pessoa ao array de Pessoas
+                pessoas.add(pessoa);
 
-            // enviar o id da pessoa para o cliente
-            out.writeUTF("id: " + pessoas.returnIdPessoa(pessoa));
+                // imprimir o array de Pessoas
+                pessoas.showPeoples();
 
-
+                // enviar o id da pessoa para o cliente
+                out.writeUTF("id: " + pessoas.returnIdPessoa(pessoa));
+            }
         } catch (EOFException e) {
             System.out.println("EOF:" + e.getMessage());
         } catch (IOException e) {

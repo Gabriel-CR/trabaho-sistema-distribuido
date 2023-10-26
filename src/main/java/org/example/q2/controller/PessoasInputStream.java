@@ -32,22 +32,22 @@ public class PessoasInputStream extends InputStream {
             DataOutputStream out = new DataOutputStream(socketRead.getOutputStream());
             DataInputStream in = new DataInputStream(socketRead.getInputStream());
 
-            // TODO: enviar o número de pessoas que serão cadastradas
+            pessoas = pessoasInputStreamView.readDataPeople();
+            int quantidade = pessoas.length;
+            out.writeInt(quantidade);
 
-            // envia os dados para o servidor
-            pessoas = new Pessoa[1];
-            pessoas[0] = pessoasInputStreamView.readDataPeople();
-            out.writeUTF(pessoas[0].getNome() + "\n" + pessoas[0].getCpf() + "\n" + pessoas[0].getIdade());
+            for (int i = 0; i < quantidade; i++) {
+                // envia os dados para o servidor
+                out.writeUTF(pessoas[i].getNome() + ';' + pessoas[i].getCpf() + ';' + pessoas[i].getIdade());
 
-            // recebe o id da pessoa cadastrada
-            String data = in.readUTF();
+                // recebe o id da pessoa cadastrada
+                String data = in.readUTF();
 
-            System.out.println("Pessoa cadastrada com sucesso!");
-            System.out.println("Seu id é: " + data);
-
+                System.out.println("Pessoa cadastrada com sucesso!");
+                System.out.println("Seu id é: " + data);
+            }
         }catch(IOException e){
             System.out.println("Socket:" + e.getMessage());
-
         }finally{
             if(socketRead != null){
                 try{
