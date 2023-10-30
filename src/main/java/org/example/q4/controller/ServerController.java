@@ -84,6 +84,8 @@ public class ServerController {
                 return "timer expirou";
             }
 
+            // TODO: contabilizar a porcentagem de votos e o ganhador
+
             candidato.vote();
             return candidato.getNome();
         }
