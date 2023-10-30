@@ -1,8 +1,6 @@
 package org.example.q4.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import org.example.q4.model.Candidato;
 
 import java.io.IOException;
@@ -14,6 +12,7 @@ public class ServerController {
     private Date timer = new Date();
 
     public ServerController() {
+        // TODO: colocar responsabilidade de cadastrar candidatos para o admin
         candidatos.put(1, new Candidato("João", 1));
         candidatos.put(2, new Candidato("Maria", 2));
         candidatos.put(3, new Candidato("José", 3));
@@ -28,6 +27,7 @@ public class ServerController {
 
             String xml = candidatosToXml();
 
+            // TODO: fazer envio de candidatos por TCP em unicast, perguntar para que usar o multicast se os candidatos vão ser enviados em unicast como pede no trabalho
             byte[] b = xml.getBytes();
             DatagramPacket pkg = new DatagramPacket(b, b.length, addr, 12347);
             System.out.println(xml);

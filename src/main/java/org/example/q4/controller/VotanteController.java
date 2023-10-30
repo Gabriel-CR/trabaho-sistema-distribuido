@@ -21,6 +21,8 @@ public class VotanteController {
     }
 
     public void runVotante() {
+        // TODO: login do votante, fazer em TCP
+
         while (true) {
             try {
                 System.out.println("Cliente esperando multicast");
