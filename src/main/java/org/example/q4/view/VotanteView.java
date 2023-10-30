@@ -4,27 +4,22 @@ import org.example.q4.model.Candidato;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class VotanteView {
-    private HashMap<Integer ,Candidato> candidatos;
+    private List<Candidato> candidatos;
 
     public VotanteView(List<Candidato> candidatos) {
-//        this.candidatos = new HashMap<Integer, Candidato>();
-        for (Candidato c : candidatos) {
-            System.out.println(c);
-            candidatos.add(c.getNumero(), c);
-        }
+        this.candidatos = candidatos;
     }
 
     public int getVoto() {
         int voto = getNumeroVoto();
 
-        var candidato = candidatos.get(voto);
-
-        if (candidato != null) {
-            return voto;
+        for (Candidato c : candidatos) {
+            if (c.getNumero() == voto) {
+                return voto;
+            }
         }
         return -1;
     }
@@ -38,7 +33,7 @@ public class VotanteView {
     }
 
     private void showCandidatos() {
-        for (Candidato candidato : candidatos.values()) {
+        for (Candidato candidato : candidatos) {
             System.out.println(candidato);
         }
     }

@@ -5,18 +5,19 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.example.q4.model.Candidato;
 import org.example.q4.view.VotanteView;
 
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
-import java.util.ArrayList;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class VotanteController {
     private VotanteView votanteView;
-    private List<Candidato> candidatos;
+    private Map<Integer, Candidato> candidatos = new HashMap<>();
+
     public VotanteController() {
-        candidatos = new ArrayList<>();
-        votanteView = new VotanteView(candidatos);
     }
 
     public void runVotante() {
@@ -35,15 +36,42 @@ public class VotanteController {
                 System.out.println("Dados recebidos: " + data);
 
                 List<Candidato> candidatos = XMLToArray(data);
-                System.out.println(candidatos.get(2));
-                // TODO: votanteView está nulo mesmo após inicialização
                 votanteView = new VotanteView(candidatos);
-                System.out.println("oi");
-                System.out.println(votanteView.getVoto());
-                System.out.println("oi");
+
+                sendVote();
                 mcs.close();
             } catch (Exception e) {
                 System.out.println("Erro: " + e.getMessage());
+            }
+        }
+    }
+
+    private void sendVote() {
+        // cria um socket para ler e escrever dado
+        Socket socketRead = null;
+
+        try {
+            // passa o endereço do servidor e a porta
+            InetAddress grp = InetAddress.getByName("localhost");
+            socketRead = new Socket(grp, 12348);
+
+            // cria um canal de saída para enviar os dados para o servidor
+            DataOutputStream out = new DataOutputStream(socketRead.getOutputStream());
+            DataInputStream in = new DataInputStream(socketRead.getInputStream());
+
+            int voto = votanteView.getVoto();
+            out.writeInt(voto);
+            String response = in.readUTF();
+            System.out.println(response);
+        } catch(IOException e) {
+            System.out.println("Socket:" + e.getMessage());
+        } finally {
+            if (socketRead != null) {
+                try {
+                    socketRead.close();
+                } catch(IOException e) {
+                    System.out.println("close:" + e.getMessage());
+                }
             }
         }
     }
@@ -59,9 +87,4 @@ public class VotanteController {
         }
     }
 
-    private void showCandidatos() {
-        for (Candidato candidato : candidatos) {
-            System.out.println(candidato);
-        }
-    }
 }
