@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AgenciaBancaria {
+public class AgenciaBancaria implements OperacoesAgencia{
     private String nome;
     private Map<String, Conta> contas;
 
@@ -30,18 +30,75 @@ public class AgenciaBancaria {
         }
     }
 
-    public String saldo(String contaId) {
+    public String saque(String contaId, Double valor) {
         var conta = this.contas.get(contaId);
 
         if (conta != null) {
-            return "Seu saldo é de R$" + conta.getSaldo();
+            conta.saque(valor);
+            return "Saque de R$" + valor + " realizado com sucesso";
         } else {
             return "Conta " + contaId + " não encontrada";
         }
     }
 
+    
+    public String saldo(String contaId) {
+        var conta = this.contas.get(contaId);
+        
+        if (conta != null) {
+            return "Seu saldo é de R$" + conta.verificarSaldo();
+        } else {
+            return "Conta " + contaId + " não encontrada";
+        }
+    }
+
+    
+    public String taxaJuros(String contaId) {
+        var conta = this.contas.get(contaId);
+
+        if (conta != null) {
+            return "A taxa de juros é de " + conta.verificarTaxaJuros() + "%";
+        } else {
+            return "Conta " + contaId + " não encontrada";
+        }
+    }
+
+
+    public String calcularJuros(String contaId) {
+        var conta = this.contas.get(contaId);
+
+        if (conta != null) {
+            conta.calcularJuros();
+            return "Juros calculados com sucesso";
+        } else {
+            return "Conta " + contaId + " não encontrada";
+        }
+    }
+
+    public String transferir(String contaId, Double valor, String agenciaIdDestino , String contaIdDestino) {
+        var conta = this.contas.get(contaId);
+        //var contaDestino = agenciaDestino.getContas().get(contaIdDestino);
+        var contaDestino = this.contas.get(contaIdDestino);
+
+        if (conta != null && contaDestino != null) {
+            conta.transferencia(valor, contaDestino);
+            return "Transferência de R$" + valor + " realizada com sucesso";
+
+        }else if(contaDestino == null){
+            return "Conta " + contaIdDestino + " não encontrada";
+
+        } else {
+            return "Conta " + contaId + " não encontrada";
+
+        }
+    }
+
     public void adicionarConta(Conta conta) {
-        contas.put(conta.getNumeroConta(), conta);
+        this.contas.put(conta.getNumeroConta(), conta);
+    }
+
+    public void encerrarConta(String contaId) {
+        this.contas.remove(contaId);
     }
 
     public Map<String, Conta> getContas() {

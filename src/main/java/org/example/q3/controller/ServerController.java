@@ -33,9 +33,35 @@ public class ServerController {
         return this.banco.deposito(agenciaId, contaId, valor);
     }
 
+    public String saque(String agenciaId, String contaId, Double valor) {
+        return this.banco.saque(agenciaId, contaId, valor);
+    }
+
     public String saldo(String agenciaId, String contaId) {
         return this.banco.saldo(agenciaId, contaId);
     }
+
+    public String taxaJuros(String agenciaId, String contaId) {
+        return this.banco.taxaJuros(agenciaId, contaId);
+    }
+
+    public String calcularJuros(String agenciaId, String contaId) {
+        return this.banco.calcularJuros(agenciaId, contaId);
+    }
+
+    public String transferir(String agenciaId, String contaId, Double valor, String agenciaIdDestino, String contaIdDestino) {
+        return this.banco.transferir(agenciaId, contaId, valor, agenciaIdDestino, contaIdDestino);
+    }
+
+    public String adicionarConta(String agenciaId, String contaId, String nome, Double saldo) {
+        return this.banco.adicionarConta(agenciaId, contaId, nome, saldo);
+    }
+
+    public String encerrarConta(String agenciaId, String contaId) {
+        return this.banco.encerrarConta(agenciaId, contaId);
+    }
+
+
 
     @Override
     public String toString() {

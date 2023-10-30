@@ -22,23 +22,36 @@ public class Conta implements OperacoesBancarias {
 
     @Override
     public void saque(Double valor) {
-        // TODO
+        if(valor > this.saldo) {
+            throw new RuntimeException("Saldo insuficiente");
+        }else {
+            this.saldo -= valor;
+        }
+    }
+
+    @Override
+    public void transferencia(Double valor, Conta contaDestino) {
+        if(valor > this.saldo) {
+            throw new RuntimeException("Saldo insuficiente");
+        }else {
+            this.saldo -= valor;
+            contaDestino.deposito(valor);
+        }
     }
 
     @Override
     public Double verificarSaldo() {
-        // TODO
-        return null;
+        return this.saldo;
+    }
+
+    @Override
+    public Double verificarTaxaJuros() {
+        return this.taxaJuros;
     }
 
     @Override
     public void calcularJuros() {
-        // TODO
-    }
-
-    @Override
-    public void transferencia(Double valor, Conta sender, Conta receiver) {
-        // TODO
+        this.saldo += this.saldo * (this.taxaJuros / 100);
     }
 
     @Override
