@@ -34,6 +34,8 @@ public class Connection extends Thread {
             String candidato = serverController.vote(voto);
             if (candidato.equals("falha")) {
                 out.writeUTF("Erro ao registrar voto");
+            } else if (candidato.equals("timer expirou")) {
+                out.writeUTF("Tempo de votação encerrado");
             } else {
                 out.writeUTF("Voto no candidato " + candidato + " registrado com sucesso");
             }

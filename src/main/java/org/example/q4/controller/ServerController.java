@@ -7,13 +7,11 @@ import org.example.q4.model.Candidato;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ServerController {
     private Map<Integer, Candidato> candidatos = new HashMap<>();
+    private Date timer = new Date();
 
     public ServerController() {
         candidatos.put(1, new Candidato("João", 1));
@@ -22,6 +20,8 @@ public class ServerController {
     }
 
     public void runServer() {
+        setTimer();
+
         try {
             InetAddress addr = InetAddress.getByName("239.0.0.1");
             DatagramSocket ds = new DatagramSocket();
@@ -40,13 +40,30 @@ public class ServerController {
         }
     }
 
+    private void setTimer() {
+        // define o tempo de votação
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Digite o horário de encerramento da votação: ");
+        String[] time = scanner.nextLine().split(":");
+
+        // Crie um objeto Calendar
+        Calendar calendar = Calendar.getInstance();
+
+        // Defina as horas, minutos e segundos desejados
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0]));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(time[1]));
+        calendar.set(Calendar.SECOND, Integer.parseInt(time[2]));
+
+        // Obtenha um objeto Date a partir do Calendar
+        this.timer = calendar.getTime();
+    }
+
     private void registerVote() {
         try{
             System.out.println("Aguardando conexão...");
             ServerSocket listenSocket = new ServerSocket(12348);
 
             while (true) {
-                // TODO: zerar as pessoas antes de salvar no arquivo
                 Socket clientSocket = listenSocket.accept();
 
                 System.out.println("Conexão estabelecida com: "+clientSocket.getInetAddress().getHostAddress());
@@ -60,8 +77,13 @@ public class ServerController {
 
     public String vote(int numeroCandidato) {
         var candidato = candidatos.get(numeroCandidato);
+        Date currentTime = new Date();
 
         if (candidato != null) {
+            if (currentTime.after(this.timer)) {
+                return "timer expirou";
+            }
+
             candidato.vote();
             return candidato.getNome();
         }
