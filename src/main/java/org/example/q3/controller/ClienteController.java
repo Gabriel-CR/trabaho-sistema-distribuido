@@ -2,6 +2,7 @@ package org.example.q3.controller;
 
 import org.example.q3.view.ClienteView;
 
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
@@ -23,17 +24,19 @@ public class ClienteController {
                 if (opcao.equals("1")) { // deposito
                     deposito();
                 } else if (opcao.equals("2")) { // saque
-                    System.out.println("TODO");
+                    saque();
                 } else if (opcao.equals("3")) { // saldo
                     saldo();
                 } else if (opcao.equals("4")) { // taxa de juros
-                    System.out.println("TODO");
+                    taxaJuros();
                 } else if (opcao.equals("5")) { // calcular juros
-                    System.out.println("TODO");
+                    calcularJuros();
                 } else if (opcao.equals("6")) { // transferir
-                    System.out.println("TODO");
-                } else if (opcao.equals("7")) { // encerrar conta
-                    System.out.println("TODO");
+                    transferir();
+                }else if (opcao.equals("7")) { // abrir conta
+                    adicionarConta();
+                }else if (opcao.equals("8")) { // encerrar conta
+                    encerrarConta();
                 } else if (opcao.equals("q")) { // sair
                     System.out.println("Sistema encerrado");
                     return;
@@ -77,6 +80,29 @@ public class ClienteController {
     }
 
     /*
+     * Faz o saque de um valor em uma conta
+     * Usa a view para receber os valores
+     */
+    public void saque() {
+        Socket socket = null;
+        try {
+            socket = new Socket(IP, PORT);
+
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            DataInputStream in = new DataInputStream(socket.getInputStream());
+
+            String agencia = clienteView.getAgenciaForUser();
+            String conta = clienteView.getContaForUser();
+            Double valor = clienteView.getValorForUser();
+            out.writeUTF("saque;" + agencia + ";" + conta + ";" + valor);
+
+            System.out.println(in.readUTF());
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao criar socket");
+        }
+    }
+
+    /*
      * Verifica o saldo de uma conta
      * Usa a view para receber os valores
      */
@@ -98,6 +124,79 @@ public class ClienteController {
         }
     }
 
+    /*
+     * Verifica a taxa de juros de uma conta
+     * Usa a view para receber os valores
+     */
+    public void taxaJuros(){
+        Socket socket = null;
+
+        try{
+            socket = new Socket(IP, PORT);
+
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            DataInputStream in = new DataInputStream(socket.getInputStream());
+
+            String agencia = clienteView.getAgenciaForUser();
+            String conta = clienteView.getContaForUser();
+
+            out.writeUTF("taxaJuros;" + agencia + ";" + conta);
+
+            System.out.println(in.readUTF());
+        }catch(Exception e){
+            throw new RuntimeException("Erro ao criar socket");
+        }
+    }
+
+
+    public void calcularJuros(){
+        Socket socket = null;
+
+        try{
+            socket = new Socket(IP, PORT);
+
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            DataInputStream in = new DataInputStream(socket.getInputStream());
+
+            String agencia = clienteView.getAgenciaForUser();
+            String conta = clienteView.getContaForUser();
+
+            out.writeUTF("calcularJuros;" + agencia + ";" + conta);
+
+            System.out.println(in.readUTF());
+        }catch(Exception e){
+            throw new RuntimeException("Erro ao criar socket");
+        }
+    }
+
+
+    /*
+     * Faz a transferência de um valor de uma conta para outra
+     * Usa a view para receber os valores
+     */
+    public void transferir() {
+        Socket socket = null;
+        try {
+            socket = new Socket(IP, PORT);
+
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            DataInputStream in = new DataInputStream(socket.getInputStream());
+
+            String agencia = clienteView.getAgenciaForUser();
+            String conta = clienteView.getContaForUser();
+            Double valor = clienteView.getValorForUser();
+            String agenciaDestino = clienteView.getAgenciaForUser();
+            String contaDestino = clienteView.getContaForUser();
+            out.writeUTF("transferir;" + agencia + ";" + conta + ";" + valor + ";" + agenciaDestino + ";" + contaDestino);
+
+            System.out.println(in.readUTF());
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao criar socket");
+        }
+    }
+
+
+    /// debug
     public void dados() {
         Socket socket = null;
         try {
@@ -108,7 +207,64 @@ public class ClienteController {
 
             out.writeUTF("dados");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao criar socket");
         }
     }
+
+    /*
+     * Faz a adição de uma conta no mapa de contas
+     * Usa a view para receber os valores
+     */
+    public void adicionarConta(){
+        Socket socket = null;
+
+        try{
+            socket = new Socket(IP, PORT);
+
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            DataInputStream in = new DataInputStream(socket.getInputStream());
+
+            String agencia = clienteView.getAgenciaForUser();
+            String conta = clienteView.getContaForUser();
+            String nome = clienteView.getNomeForUser();
+            String saldo = clienteView.getSaldoForUser();
+
+            out.writeUTF("adicionarConta;" + agencia + ";" + conta + ";" + nome + ";" + saldo);
+            System.out.println(in.readUTF());
+            
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao criar socket");
+        }
+    }
+
+
+    /*
+     * Faz a remoção de uma conta no mapa de contas
+     * Usa a view para receber os valores
+     */
+    public void encerrarConta(){
+        Socket socket = null;
+
+        try{
+            socket = new Socket(IP, PORT);
+
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            DataInputStream in = new DataInputStream(socket.getInputStream());
+
+            String agencia = clienteView.getAgenciaForUser();
+            String conta = clienteView.getContaForUser();
+
+            out.writeUTF("encerrarConta;" + agencia + ";" + conta);
+
+            System.out.println(in.readUTF());
+
+
+        }catch(Exception e){
+            throw new RuntimeException("Erro ao criar socket");
+        }
+    }
+
+
+
+
 }

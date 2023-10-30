@@ -21,7 +21,8 @@ public class ClienteView {
                     "[4] verificar taxa de juros\n" +
                     "[5] calcular juros\n" +
                     "[6] transferir\n" +
-                    "[7] encerrar conta\n" +
+                    "[7] abrir conta\n" +
+                    "[8] encerrar conta\n" +
                     "[q] sair");
             System.out.print("Sua escolha: ");
             String opcao = scanner.nextLine();
@@ -65,6 +66,28 @@ public class ClienteView {
             return agencia;
         } catch (Exception exception) {
             throw new Exception("Erro ao ler nome da agencia");
+        }
+    }
+
+    public String getNomeForUser() throws Exception {
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Digite o nome: ");
+            String nome = scanner.nextLine();
+            return nome;
+        } catch (Exception exception) {
+            throw new Exception("Erro ao ler nome");
+        }
+    }
+
+    public String getSaldoForUser() throws Exception {
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Digite o saldo: ");
+            String saldo = scanner.nextLine();
+            return saldo;
+        } catch (Exception exception) {
+            throw new Exception("Erro ao ler saldo");
         }
     }
 }

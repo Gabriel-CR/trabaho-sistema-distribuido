@@ -26,6 +26,16 @@ public class Banco {
         }
     }
 
+    public String saque(String agenciaId, String contaId, Double valor) {
+        var agencia = this.agencias.get(agenciaId);
+
+        if (agencia != null) {
+            return agencia.saque(contaId, valor);
+        } else {
+            return "Agencia " + agenciaId + " não encontrada";
+        }
+    }
+
     public String saldo(String agenciaId, String contaId) {
         var agencia = this.agencias.get(agenciaId);
 
@@ -36,9 +46,71 @@ public class Banco {
         }
     }
 
+    public String taxaJuros(String agenciaId, String contaId) {
+        var agencia = this.agencias.get(agenciaId);
+
+        if (agencia != null) {
+            return agencia.taxaJuros(contaId);
+        } else {
+            return "Agencia " + agenciaId + " não encontrada";
+        }
+    }
+
+    public String calcularJuros(String agenciaId, String contaId) {
+        var agencia = this.agencias.get(agenciaId);
+
+        if (agencia != null) {
+            return agencia.calcularJuros(contaId);
+        } else {
+            return "Agencia " + agenciaId + " não encontrada";
+        }
+    }
+
+    public String transferir(String agenciaId, String contaId, Double valor, String agenciaIdDestino, String contaIdDestino) {
+        var agencia = this.agencias.get(agenciaId);
+        var agenciaDestino = this.agencias.get(agenciaIdDestino);
+
+        if (agencia != null && agenciaDestino != null) {
+            return agencia.transferir(contaId, valor, agenciaIdDestino, contaIdDestino);
+        }else if(agenciaDestino != null){
+            return "Agencia " + agenciaId + " não encontrada";
+        } else {
+            return "Agencia " + agenciaId + " não encontrada";
+        }
+    }
+
     public void adicionarAgencia(AgenciaBancaria agencia) {
         agencias.put(agencia.getNome(), agencia);
     }
+
+    public String adicionarConta(String agenciaId, String contaId, String nome, Double saldo) {
+        var agencia = this.agencias.get(agenciaId);
+        var conta = new Conta(contaId, nome, saldo, 13.34);
+
+        if (agencia != null && agencia.getContas().containsKey(contaId) == false) {
+            agencia.adicionarConta(conta);
+            System.out.println("Conta adicionada com sucesso");
+
+            return "Conta adicionada com sucesso";
+        } else {
+            return "Agencia " + agenciaId + "não encontrada";
+        }
+    }
+
+
+    public String encerrarConta(String agenciaId, String contaId){
+        var agencia = this.agencias.get(agenciaId);
+
+        if(agencia != null && agencia.getContas().containsKey(contaId) == true){
+            agencia.encerrarConta(contaId);
+            System.out.println("Conta removida com sucesso");
+
+            return "Conta removida com sucesso";
+        }else{
+            return "Agencia " + agenciaId + "não encontrada ou conta " + contaId + " não encontrada";
+        }
+    }
+
 
     public Map<String, AgenciaBancaria> getAgencias() {
         return agencias;
