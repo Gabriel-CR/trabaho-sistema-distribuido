@@ -54,12 +54,16 @@ public class VotanteController {
 
         try {
             // passa o endereço do servidor e a porta
+            // TODO: trocal o localhost para o IP do servidor quando for rodar o cliente
             InetAddress grp = InetAddress.getByName("localhost");
             socketRead = new Socket(grp, 12348);
 
             // cria um canal de saída para enviar os dados para o servidor
             DataOutputStream out = new DataOutputStream(socketRead.getOutputStream());
             DataInputStream in = new DataInputStream(socketRead.getInputStream());
+
+            // informando o tipo de client para o servidor
+            out.writeUTF("votante");
 
             int voto = votanteView.getVoto();
             out.writeInt(voto);

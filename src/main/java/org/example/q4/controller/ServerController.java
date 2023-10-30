@@ -1,5 +1,6 @@
 package org.example.q4.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.example.q4.model.Candidato;
 
@@ -13,12 +14,13 @@ public class ServerController {
 
     public ServerController() {
         // TODO: colocar responsabilidade de cadastrar candidatos para o admin
-        candidatos.put(1, new Candidato("João", 1));
-        candidatos.put(2, new Candidato("Maria", 2));
-        candidatos.put(3, new Candidato("José", 3));
+//        candidatos.put(1, new Candidato("João", 1));
+//        candidatos.put(2, new Candidato("Maria", 2));
+//        candidatos.put(3, new Candidato("José", 3));
     }
 
     public void runServer() {
+        receberCandidatos();
         setTimer();
 
         try {
@@ -38,6 +40,34 @@ public class ServerController {
         } catch (Exception e) {
             System.out.println("Nao foi possivel enviar a mensagem");
         }
+    }
+
+    private void receberCandidatos() {
+        try {
+            System.out.println("Servidor iniciado");
+            int serverPort = 7896; // the server port
+            ServerSocket listenSocket = new ServerSocket(serverPort);
+            while (true) {
+                Socket clientSocket = listenSocket.accept();
+                System.out.println(clientSocket.getInetAddress());
+                System.out.println("conexão estabelecida");
+                Connection c = new Connection(clientSocket, this);
+            }
+        } catch (IOException e) {
+            System.out.println("Listen socket:" + e.getMessage());
+        }
+    }
+
+    public String setCandidatos(String xmlCandidatos) {
+        System.out.println("Fazendo candidatos");
+        List<Candidato> candidatoList = XMLToArray(xmlCandidatos);
+
+        for (Candidato c : candidatoList) {
+            this.candidatos.put(c.getNumero(), c);
+        }
+        System.out.println("candidatos feitos");
+
+        return "Candidatos cadastrados com sucesso";
     }
 
     private void setTimer() {
@@ -108,6 +138,17 @@ public class ServerController {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Erro ao fazer o XML");
+            return null;
+        }
+    }
+
+    private List<Candidato> XMLToArray(String xml) {
+        try {
+            XmlMapper xmlMapper = new XmlMapper();
+            List<Candidato> candidatos = xmlMapper.readValue(xml, new TypeReference<List<Candidato>>(){});
+            return candidatos;
+        } catch (Exception e) {
+            System.out.println("Erro ao transformar XML para List<Candidato>");
             return null;
         }
     }

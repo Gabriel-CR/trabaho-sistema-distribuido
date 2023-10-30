@@ -18,6 +18,7 @@ public class Connection extends Thread {
         try {
             clientSocket = aClientSocket;
             this.serverController = serverController;
+            // TODO: fazer um in e out para votante e admin
             in = new DataInputStream(clientSocket.getInputStream());
             out = new DataOutputStream(clientSocket.getOutputStream());
             this.start();
@@ -30,17 +31,30 @@ public class Connection extends Thread {
         try { // an echo server
             System.out.println("Aguardando dados...");
 
-            int voto = in.readInt();
-            String candidato = serverController.vote(voto);
-            if (candidato.equals("falha")) {
-                out.writeUTF("Erro ao registrar voto");
-            } else if (candidato.equals("timer expirou")) {
-                out.writeUTF("Tempo de votação encerrado");
+            // TODO: alterar para receber dos votantes e receber dos admins
+            String clientType = in.readUTF();
+
+            if (clientType.equals("votante")) {
+                int voto = in.readInt();
+                String candidato = serverController.vote(voto);
+                if (candidato.equals("falha")) {
+                    out.writeUTF("Erro ao registrar voto");
+                } else if (candidato.equals("timer expirou")) {
+                    out.writeUTF("Tempo de votação encerrado");
+                } else {
+                    out.writeUTF("Voto no candidato " + candidato + " registrado com sucesso");
+                }
+
+                serverController.showVotes();
+            } else if (clientType.equals("admin")) {
+                String receive = in.readUTF();
+                String response = serverController.setCandidatos(receive);
+                System.out.println(response);
+                out.writeUTF(response);
             } else {
-                out.writeUTF("Voto no candidato " + candidato + " registrado com sucesso");
+                System.out.println("Tipo de cliente " + clientType + " não válido");
             }
 
-            serverController.showVotes();
         } catch (EOFException e) {
             System.out.println("EOF:" + e.getMessage());
         } catch (IOException e) {

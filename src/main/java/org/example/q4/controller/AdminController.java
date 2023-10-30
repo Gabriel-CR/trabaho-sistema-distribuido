@@ -1,5 +1,6 @@
 package org.example.q4.controller;
 
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.example.q4.model.Candidato;
 
 import java.io.DataInputStream;
@@ -33,14 +34,12 @@ public class AdminController {
             registerCandidatos();
 
             // TODO: enviar candidatos
+            out.writeUTF("admin");
+            String xmlCandidatos = candidatosToXml();
+            out.writeUTF(xmlCandidatos);
 
             // TODO: criar socket multicast para enviar os avisos
 
-            String envio = "sistemas_distribuidos";
-            System.out.println("Sent: "+envio);
-            out.writeUTF(envio); // UTF is a string encoding see Sn. 4.4
-            String data = in.readUTF(); // read a line of data from the stream
-            System.out.println("Received: " + data);
         } catch (UnknownHostException e) {
             System.out.println("Socket:" + e.getMessage());
         } catch (EOFException e) {
@@ -65,6 +64,26 @@ public class AdminController {
             String nome = scanner.nextLine();
             System.out.print("Número: ");
             int numero = scanner.nextInt();
+
+            this.candidatos.add(new Candidato(nome, numero));
+
+            scanner.nextLine();
+            String novoCandidato = scanner.nextLine();
+            if (novoCandidato.equals("n") || novoCandidato.equals("N")) {
+                break;
+            }
+        }
+    }
+
+    private String candidatosToXml() {
+        try {
+            XmlMapper xmlMapper = new XmlMapper();
+            String xml = xmlMapper.writeValueAsString(candidatos);
+            return xml;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Erro ao fazer o XML");
+            return null;
         }
     }
 }
