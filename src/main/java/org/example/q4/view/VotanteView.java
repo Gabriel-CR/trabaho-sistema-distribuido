@@ -9,8 +9,7 @@ import java.util.Scanner;
 public class VotanteView {
     private List<Candidato> candidatos;
 
-    public VotanteView(List<Candidato> candidatos) {
-        this.candidatos = candidatos;
+    public VotanteView() {
     }
 
     public int getVoto() {
@@ -36,5 +35,16 @@ public class VotanteView {
         for (Candidato candidato : candidatos) {
             System.out.println(candidato);
         }
+    }
+
+    public String getLogin() {
+        System.out.print("Digite seu título de eleitor: ");
+        Scanner scanner = new Scanner(System.in);
+        String tituloEleitor = scanner.nextLine();
+        return tituloEleitor;
+    }
+
+    public void setCandidatos(List<Candidato> candidatos) {
+        this.candidatos = candidatos;
     }
 }

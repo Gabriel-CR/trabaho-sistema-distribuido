@@ -18,11 +18,10 @@ public class VotanteController {
     private Map<Integer, Candidato> candidatos = new HashMap<>();
 
     public VotanteController() {
+        this.votanteView = new VotanteView();
     }
 
     public void runVotante() {
-        // TODO: login do votante, fazer em TCP
-
         while (true) {
             try {
                 System.out.println("Cliente esperando multicast");
@@ -34,18 +33,57 @@ public class VotanteController {
                 DatagramPacket pkg = new DatagramPacket(rec, rec.length);
                 mcs.receive(pkg);
 
-                String data = new String(pkg.getData());
-                System.out.println("Dados recebidos: " + data);
+                if (login()) {
+                    String data = new String(pkg.getData());
+                    System.out.println("Dados recebidos: " + data);
 
-                List<Candidato> candidatos = XMLToArray(data);
-                votanteView = new VotanteView(candidatos);
+                    List<Candidato> candidatos = XMLToArray(data);
+                    votanteView.setCandidatos(candidatos);
 
-                sendVote();
-                mcs.close();
+                    sendVote();
+                    mcs.close();
+                }
             } catch (Exception e) {
                 System.out.println("Erro: " + e.getMessage());
             }
         }
+    }
+
+    private boolean login() {
+        // cria um socket para ler e escrever dado
+        Socket socketRead = null;
+
+        try {
+            // passa o endereço do servidor e a porta
+            InetAddress grp = InetAddress.getByName("localhost");
+            socketRead = new Socket(grp, 12348);
+
+            // cria um canal de saída para enviar os dados para o servidor
+            DataOutputStream out = new DataOutputStream(socketRead.getOutputStream());
+            DataInputStream in = new DataInputStream(socketRead.getInputStream());
+
+            // informando o tipo de client para o servidor
+            out.writeUTF("votantelogin");
+            String login = votanteView.getLogin();
+            out.writeUTF(login);
+            String response = in.readUTF();
+            System.out.println(response);
+            if (response.equals("Falha ao fazer login")) {
+                return false;
+            }
+            return true;
+        } catch(IOException e) {
+            System.out.println("Socket:" + e.getMessage());
+        } finally {
+            if (socketRead != null) {
+                try {
+                    socketRead.close();
+                } catch(IOException e) {
+                    System.out.println("close:" + e.getMessage());
+                }
+            }
+        }
+        return false;
     }
 
     private void sendVote() {

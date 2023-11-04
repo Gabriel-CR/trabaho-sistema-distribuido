@@ -43,18 +43,21 @@ public class ServerController {
     }
 
     private void receberCandidatos() {
-        try {
-            System.out.println("Servidor iniciado");
-            int serverPort = 7896; // the server port
-            ServerSocket listenSocket = new ServerSocket(serverPort);
-            while (true) {
-                Socket clientSocket = listenSocket.accept();
-                System.out.println(clientSocket.getInetAddress());
-                System.out.println("conexão estabelecida");
-                Connection c = new Connection(clientSocket, this);
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("====== REGISTRAR CANDIDATO ======");
+            System.out.print("Nome: ");
+            String nome = scanner.nextLine();
+            System.out.print("Número: ");
+            int numero = scanner.nextInt();
+
+            this.candidatos.put(numero, new Candidato(nome, numero));
+
+            scanner.nextLine();
+            String novoCandidato = scanner.nextLine();
+            if (novoCandidato.equals("n") || novoCandidato.equals("N")) {
+                break;
             }
-        } catch (IOException e) {
-            System.out.println("Listen socket:" + e.getMessage());
         }
     }
 
@@ -98,6 +101,7 @@ public class ServerController {
 
                 System.out.println("Conexão estabelecida com: "+clientSocket.getInetAddress().getHostAddress());
                 Connection c = new Connection(clientSocket, this);
+//                Connection cLogin = new Connection(clientSocket, this);
             }
 
         } catch (IOException e) {

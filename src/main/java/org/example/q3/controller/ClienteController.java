@@ -263,8 +263,4 @@ public class ClienteController {
             throw new RuntimeException("Erro ao criar socket");
         }
     }
-
-
-
-
 }

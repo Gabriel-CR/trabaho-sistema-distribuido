@@ -18,7 +18,6 @@ public class Connection extends Thread {
         try {
             clientSocket = aClientSocket;
             this.serverController = serverController;
-            // TODO: fazer um in e out para votante e admin
             in = new DataInputStream(clientSocket.getInputStream());
             out = new DataOutputStream(clientSocket.getOutputStream());
             this.start();
@@ -51,6 +50,13 @@ public class Connection extends Thread {
                 String response = serverController.setCandidatos(receive);
                 System.out.println(response);
                 out.writeUTF(response);
+            } else if (clientType.equals("votantelogin")) {
+                String password = in.readUTF();
+                if (password.length() == 12) {
+                    out.writeUTF("Login realizado com sucesso");
+                } else {
+                    out.writeUTF("Falha ao fazer login");
+                }
             } else {
                 System.out.println("Tipo de cliente " + clientType + " não válido");
             }
