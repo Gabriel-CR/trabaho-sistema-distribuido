@@ -30,7 +30,6 @@ public class Connection extends Thread {
         try { // an echo server
             System.out.println("Aguardando dados...");
 
-            // TODO: alterar para receber dos votantes e receber dos admins
             String clientType = in.readUTF();
 
             if (clientType.equals("votante")) {
