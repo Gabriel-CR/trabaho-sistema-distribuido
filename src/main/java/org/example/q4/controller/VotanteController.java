@@ -42,10 +42,31 @@ public class VotanteController {
 
                     sendVote();
                     mcs.close();
+                    break;
                 }
             } catch (Exception e) {
                 System.out.println("Erro: " + e.getMessage());
             }
+        }
+
+        esperarResultado();
+    }
+
+    private void esperarResultado() {
+        try {
+            System.out.println("Cliente esperando resultado da eleição");
+            MulticastSocket mcs = new MulticastSocket(12347);
+            InetAddress grp = InetAddress.getByName("239.0.0.1");
+            mcs.joinGroup(grp);
+
+            byte rec[] = new byte[256];
+            DatagramPacket pkg = new DatagramPacket(rec, rec.length);
+            mcs.receive(pkg);
+
+            String data = new String(pkg.getData());
+            System.out.println("Resultado: " + data);
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
         }
     }
 

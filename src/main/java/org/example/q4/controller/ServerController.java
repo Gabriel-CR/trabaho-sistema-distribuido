@@ -6,6 +6,7 @@ import org.example.q4.model.Candidato;
 
 import java.io.IOException;
 import java.net.*;
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class ServerController {
@@ -13,10 +14,7 @@ public class ServerController {
     private Date timer = new Date();
 
     public ServerController() {
-        // TODO: colocar responsabilidade de cadastrar candidatos para o admin
-//        candidatos.put(1, new Candidato("João", 1));
-//        candidatos.put(2, new Candidato("Maria", 2));
-//        candidatos.put(3, new Candidato("José", 3));
+        // TODO: fazer envio de mensagens
     }
 
     public void runServer() {
@@ -40,6 +38,51 @@ public class ServerController {
         } catch (Exception e) {
             System.out.println("Nao foi possivel enviar a mensagem");
         }
+    }
+
+    public void sendResult() {
+        try {
+            InetAddress addr = InetAddress.getByName("239.0.0.1");
+            DatagramSocket ds = new DatagramSocket();
+
+            String result = getVencedor();
+            System.out.println(result);
+
+            byte[] b = result.getBytes();
+            DatagramPacket pkg = new DatagramPacket(b, b.length, addr, 12347);
+            System.out.println(result);
+
+            ds.send(pkg);
+            ds.close();
+        } catch (Exception e) {
+            System.out.println("Nao foi possivel enviar a mensagem dos candidatos vencedores");
+        }
+    }
+
+    private String getVencedor() {
+        System.out.println("vencedor");
+        List<Candidato> candidatoList = new ArrayList<>(this.candidatos.values());
+        int totalVotos = candidatoList.get(0).getVotos();
+        Candidato vencedor = candidatoList.get(0);
+
+        for (int i = 1; i < candidatoList.size(); i++) {
+            System.out.println(candidatoList.get(i).getVotos());
+            totalVotos += candidatoList.get(i).getVotos();
+
+            if (candidatoList.get(i).getVotos() > vencedor.getVotos()) {
+                vencedor = candidatoList.get(i);
+            }
+        }
+
+        if (totalVotos == 0) {
+            return "Nenhum voto foi realizado";
+        }
+
+        int porcentagem = vencedor.getVotos() / totalVotos;
+        System.out.println("vencedor");
+
+        return "O candidato vencedor foi o " + vencedor.getNome() + " com " + new DecimalFormat("#.##%").format(porcentagem) + " dos votos";
+
     }
 
     private void receberCandidatos() {
@@ -89,6 +132,7 @@ public class ServerController {
 
         // Obtenha um objeto Date a partir do Calendar
         this.timer = calendar.getTime();
+        Cronometro cronometro = new Cronometro(timer, this);
     }
 
     private void registerVote() {
@@ -99,9 +143,8 @@ public class ServerController {
             while (true) {
                 Socket clientSocket = listenSocket.accept();
 
-                System.out.println("Conexão estabelecida com: "+clientSocket.getInetAddress().getHostAddress());
+                System.out.println("Conexão estabelecida com: " + clientSocket.getInetAddress().getHostAddress());
                 Connection c = new Connection(clientSocket, this);
-//                Connection cLogin = new Connection(clientSocket, this);
             }
 
         } catch (IOException e) {
