@@ -7,6 +7,7 @@ import org.example.q4.model.Candidato;
 import java.io.IOException;
 import java.net.*;
 import java.text.DecimalFormat;
+import java.text.MessageFormat;
 import java.util.*;
 
 public class ServerController {
@@ -14,7 +15,6 @@ public class ServerController {
     private Date timer = new Date();
 
     public ServerController() {
-        // TODO: fazer envio de mensagens
     }
 
     public void runServer() {
@@ -46,11 +46,11 @@ public class ServerController {
             DatagramSocket ds = new DatagramSocket();
 
             String result = getVencedor();
+            result = "[RESULTADO] " + result + ";";
             System.out.println(result);
 
             byte[] b = result.getBytes();
             DatagramPacket pkg = new DatagramPacket(b, b.length, addr, 12347);
-            System.out.println(result);
 
             ds.send(pkg);
             ds.close();
@@ -59,14 +59,32 @@ public class ServerController {
         }
     }
 
+    public void sendMessage() {
+        try {
+            InetAddress addr = InetAddress.getByName("239.0.0.1");
+            DatagramSocket ds = new DatagramSocket();
+
+            Scanner scanner = new Scanner(System.in);
+
+            String message = scanner.nextLine();
+            message = "[MESSAGE] " + message + ";";
+
+            byte[] b = message.getBytes();
+            DatagramPacket pkg = new DatagramPacket(b, b.length, addr, 12347);
+
+            ds.send(pkg);
+            ds.close();
+        } catch (Exception e) {
+            System.out.println("Nao foi possivel enviar a mensagem aos votantes");
+        }
+    }
+
     private String getVencedor() {
-        System.out.println("vencedor");
         List<Candidato> candidatoList = new ArrayList<>(this.candidatos.values());
         int totalVotos = candidatoList.get(0).getVotos();
         Candidato vencedor = candidatoList.get(0);
 
         for (int i = 1; i < candidatoList.size(); i++) {
-            System.out.println(candidatoList.get(i).getVotos());
             totalVotos += candidatoList.get(i).getVotos();
 
             if (candidatoList.get(i).getVotos() > vencedor.getVotos()) {
@@ -79,7 +97,6 @@ public class ServerController {
         }
 
         int porcentagem = vencedor.getVotos() / totalVotos;
-        System.out.println("vencedor");
 
         return "O candidato vencedor foi o " + vencedor.getNome() + " com " + new DecimalFormat("#.##%").format(porcentagem) + " dos votos";
 
@@ -136,6 +153,8 @@ public class ServerController {
     }
 
     private void registerVote() {
+        Mensagem m = new Mensagem(this);
+
         try{
             System.out.println("Aguardando conexão...");
             ServerSocket listenSocket = new ServerSocket(12348);

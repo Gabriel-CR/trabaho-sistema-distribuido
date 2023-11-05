@@ -44,11 +44,6 @@ public class Connection extends Thread {
                 }
 
                 serverController.showVotes();
-            } else if (clientType.equals("admin")) {
-                String receive = in.readUTF();
-                String response = serverController.setCandidatos(receive);
-                System.out.println(response);
-                out.writeUTF(response);
             } else if (clientType.equals("votantelogin")) {
                 String password = in.readUTF();
                 if (password.length() == 12) {

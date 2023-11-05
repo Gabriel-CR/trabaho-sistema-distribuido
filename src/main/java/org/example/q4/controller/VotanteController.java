@@ -53,20 +53,23 @@ public class VotanteController {
     }
 
     private void esperarResultado() {
-        try {
-            System.out.println("Cliente esperando resultado da eleição");
-            MulticastSocket mcs = new MulticastSocket(12347);
-            InetAddress grp = InetAddress.getByName("239.0.0.1");
-            mcs.joinGroup(grp);
+        System.out.println("Cliente esperando resultado/mensagens da eleição");
+        while (true) {
+            try {
+                MulticastSocket mcs = new MulticastSocket(12347);
+                InetAddress grp = InetAddress.getByName("239.0.0.1");
+                mcs.joinGroup(grp);
 
-            byte rec[] = new byte[256];
-            DatagramPacket pkg = new DatagramPacket(rec, rec.length);
-            mcs.receive(pkg);
+                byte rec[] = new byte[256];
+                DatagramPacket pkg = new DatagramPacket(rec, rec.length);
+                mcs.receive(pkg);
 
-            String data = new String(pkg.getData());
-            System.out.println("Resultado: " + data);
-        } catch (Exception e) {
-            System.out.println("Erro: " + e.getMessage());
+                String data = new String(pkg.getData());
+                String response = data.split(";")[0];
+                System.out.println(response);
+            } catch (Exception e) {
+                System.out.println("Erro: " + e.getMessage());
+            }
         }
     }
 
