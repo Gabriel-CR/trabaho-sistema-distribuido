@@ -7,10 +7,11 @@ import org.example.q4.model.Candidato;
 import java.io.IOException;
 import java.net.*;
 import java.text.DecimalFormat;
-import java.text.MessageFormat;
 import java.util.*;
 
 public class ServerController {
+    private final String IP = "239.0.0.1";
+    private final int PORT = 12347;
     private Map<Integer, Candidato> candidatos = new HashMap<>();
     private Date timer = new Date();
 
@@ -22,14 +23,14 @@ public class ServerController {
         setTimer();
 
         try {
-            InetAddress addr = InetAddress.getByName("239.0.0.1");
+            InetAddress addr = InetAddress.getByName(IP);
             DatagramSocket ds = new DatagramSocket();
 
             String xml = candidatosToXml();
 
             // TODO: fazer envio de candidatos por TCP em unicast, perguntar para que usar o multicast se os candidatos vão ser enviados em unicast como pede no trabalho
             byte[] b = xml.getBytes();
-            DatagramPacket pkg = new DatagramPacket(b, b.length, addr, 12347);
+            DatagramPacket pkg = new DatagramPacket(b, b.length, addr, PORT);
             System.out.println(xml);
 
             ds.send(pkg);
@@ -50,7 +51,7 @@ public class ServerController {
             System.out.println(result);
 
             byte[] b = result.getBytes();
-            DatagramPacket pkg = new DatagramPacket(b, b.length, addr, 12347);
+            DatagramPacket pkg = new DatagramPacket(b, b.length, addr, PORT);
 
             ds.send(pkg);
             ds.close();
@@ -157,7 +158,7 @@ public class ServerController {
 
         try{
             System.out.println("Aguardando conexão...");
-            ServerSocket listenSocket = new ServerSocket(12348);
+            ServerSocket listenSocket = new ServerSocket(PORT + 1);
 
             while (true) {
                 Socket clientSocket = listenSocket.accept();

@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 public class VotanteController {
+    private final String IP = "239.0.0.1";
+    private final int PORT = 12347;
+    private final String SERVER_IP = "localhost";
     private VotanteView votanteView;
     private Map<Integer, Candidato> candidatos = new HashMap<>();
 
@@ -25,8 +28,8 @@ public class VotanteController {
         while (true) {
             try {
                 System.out.println("Cliente esperando multicast");
-                MulticastSocket mcs = new MulticastSocket(12347);
-                InetAddress grp = InetAddress.getByName("239.0.0.1");
+                MulticastSocket mcs = new MulticastSocket(PORT);
+                InetAddress grp = InetAddress.getByName(IP);
                 mcs.joinGroup(grp);
 
                 byte rec[] = new byte[256];
@@ -56,8 +59,8 @@ public class VotanteController {
         System.out.println("Cliente esperando resultado/mensagens da eleição");
         while (true) {
             try {
-                MulticastSocket mcs = new MulticastSocket(12347);
-                InetAddress grp = InetAddress.getByName("239.0.0.1");
+                MulticastSocket mcs = new MulticastSocket(PORT);
+                InetAddress grp = InetAddress.getByName(IP);
                 mcs.joinGroup(grp);
 
                 byte rec[] = new byte[256];
@@ -117,8 +120,8 @@ public class VotanteController {
         try {
             // passa o endereço do servidor e a porta
             // TODO: trocal o localhost para o IP do servidor quando for rodar o cliente
-            InetAddress grp = InetAddress.getByName("localhost");
-            socketRead = new Socket(grp, 12348);
+            InetAddress grp = InetAddress.getByName(SERVER_IP);
+            socketRead = new Socket(grp, PORT + 1);
 
             // cria um canal de saída para enviar os dados para o servidor
             DataOutputStream out = new DataOutputStream(socketRead.getOutputStream());
