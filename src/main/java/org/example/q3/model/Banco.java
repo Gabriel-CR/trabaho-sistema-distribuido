@@ -71,7 +71,9 @@ public class Banco {
         var agenciaDestino = this.agencias.get(agenciaIdDestino);
 
         if (agencia != null && agenciaDestino != null) {
-            return agencia.transferir(contaId, valor, agenciaIdDestino, contaIdDestino);
+            agencia.saque(contaId, valor);
+            agenciaDestino.deposito(contaIdDestino, valor);
+            return "Transferência de R$" + valor + " realizada com sucesso";
         }else if(agenciaDestino != null){
             return "Agencia " + agenciaId + " não encontrada";
         } else {

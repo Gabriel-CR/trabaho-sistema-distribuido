@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServerController {
+    private final int PORT = 9000;
     private Banco banco;
 
     public ServerController() {
@@ -16,7 +17,7 @@ public class ServerController {
     public void serverRun() {
         try {
             System.out.println("Aguardando conexão...");
-            ServerSocket serverSocket = new ServerSocket(9000);
+            ServerSocket serverSocket = new ServerSocket(PORT);
 
             while (true) {
                 Socket client = serverSocket.accept();
@@ -60,8 +61,6 @@ public class ServerController {
     public String encerrarConta(String agenciaId, String contaId) {
         return this.banco.encerrarConta(agenciaId, contaId);
     }
-
-
 
     @Override
     public String toString() {

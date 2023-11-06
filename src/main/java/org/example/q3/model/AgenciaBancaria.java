@@ -34,7 +34,11 @@ public class AgenciaBancaria implements OperacoesAgencia{
         var conta = this.contas.get(contaId);
 
         if (conta != null) {
-            conta.saque(valor);
+            try {
+                conta.saque(valor);
+            } catch (Exception e) {
+                return "Saldo insuficiente";
+            }
             return "Saque de R$" + valor + " realizado com sucesso";
         } else {
             return "Conta " + contaId + " não encontrada";
@@ -81,7 +85,11 @@ public class AgenciaBancaria implements OperacoesAgencia{
         var contaDestino = this.contas.get(contaIdDestino);
 
         if (conta != null && contaDestino != null) {
-            conta.transferencia(valor, contaDestino);
+            try {
+                conta.transferencia(valor, contaDestino);
+            } catch (Exception e) {
+                return "Saldo insuficiente";
+            }
             return "Transferência de R$" + valor + " realizada com sucesso";
 
         }else if(contaDestino == null){
