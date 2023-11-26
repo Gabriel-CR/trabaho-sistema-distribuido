@@ -73,11 +73,12 @@ public class Connection extends Thread {
                 out.writeUTF(response);
             
             } else if(operacao[0].equals("adicionarConta")){
-                String agencia = operacao[1];
-                String conta = operacao[2];
-                String nome = operacao[3];
-                Double saldo = Double.valueOf(operacao[4]);
-                String response = serverController.adicionarConta(agencia, conta, nome, saldo);
+                String tipo = operacao[1];
+                String agencia = operacao[2];
+                String conta = operacao[3];
+                String nome = operacao[4];
+                Double saldo = Double.valueOf(operacao[5]);
+                String response = serverController.adicionarConta(tipo ,agencia, conta, nome, saldo);
 
                 out.writeUTF(response);
            

@@ -8,4 +8,10 @@ public class ContaCorrente extends Conta {
     public ContaCorrente(String numeroConta, String titularConta, Double saldo, Double taxaJuros) {
         super(numeroConta, titularConta, saldo, taxaJuros);
     }
+
+    // TODO: implementar métodos especificos desta conta
+    @Override
+    public String toString() {
+        return "tipo: conta corrente, numero: " + this.getNumeroConta() + ", nome: " + this.getTitularConta() + ", saldo: R$" + this.getSaldo();
+    }
 }

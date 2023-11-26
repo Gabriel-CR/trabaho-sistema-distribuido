@@ -85,9 +85,17 @@ public class Banco {
         agencias.put(agencia.getNome(), agencia);
     }
 
-    public String adicionarConta(String agenciaId, String contaId, String nome, Double saldo) {
+    public String adicionarConta(String tipo, String agenciaId, String contaId, String nome, Double saldo) {
         var agencia = this.agencias.get(agenciaId);
-        var conta = new Conta(contaId, nome, saldo, 13.34);
+        var conta = new Conta(contaId, nome, saldo, 0.0);
+        
+        if (tipo.equals("1")) {
+            conta = new ContaCorrente(contaId, nome, saldo , 0.0);
+        } else if (tipo.equals("2")) {
+            conta = new ContaPoupancao(contaId, nome, saldo, 13.43);
+        } else {
+            return "Tipo de conta não encontrado";
+        }
 
         if (agencia != null && agencia.getContas().containsKey(contaId) == false) {
             agencia.adicionarConta(conta);

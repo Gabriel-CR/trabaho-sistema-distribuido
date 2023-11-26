@@ -54,8 +54,8 @@ public class ServerController {
         return this.banco.transferir(agenciaId, contaId, valor, agenciaIdDestino, contaIdDestino);
     }
 
-    public String adicionarConta(String agenciaId, String contaId, String nome, Double saldo) {
-        return this.banco.adicionarConta(agenciaId, contaId, nome, saldo);
+    public String adicionarConta(String tipo, String agenciaId, String contaId, String nome, Double saldo) {
+        return this.banco.adicionarConta(tipo, agenciaId, contaId, nome, saldo);
     }
 
     public String encerrarConta(String agenciaId, String contaId) {

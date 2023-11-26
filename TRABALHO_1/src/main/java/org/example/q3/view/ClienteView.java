@@ -47,6 +47,17 @@ public class ClienteView {
         }
     }
 
+    public String getTipoContaForUser() throws Exception {
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Digite o tipo da conta[Conta Corrente(1) OU Conta Poupanca(2)]: ");
+            String tipoConta = scanner.nextLine();
+            return tipoConta;
+        } catch (Exception exception) {
+            throw new Exception("Erro ao ler tipo da conta");
+        }
+    }
+
     public String getContaForUser() throws Exception {
         try {
             Scanner scanner = new Scanner(System.in);

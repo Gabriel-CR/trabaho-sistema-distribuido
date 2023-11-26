@@ -223,13 +223,14 @@ public class ClienteController {
 
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             DataInputStream in = new DataInputStream(socket.getInputStream());
-
+            
+            String tipo = clienteView.getTipoContaForUser();
             String agencia = clienteView.getAgenciaForUser();
             String conta = clienteView.getContaForUser();
             String nome = clienteView.getNomeForUser();
             String saldo = clienteView.getSaldoForUser();
 
-            out.writeUTF("adicionarConta;" + agencia + ";" + conta + ";" + nome + ";" + saldo);
+            out.writeUTF("adicionarConta;" + tipo + ";" + agencia + ";" + conta + ";" + nome + ";" + saldo);
             System.out.println(in.readUTF());
             
         } catch (Exception e) {

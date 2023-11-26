@@ -8,4 +8,9 @@ public class ContaPoupancao extends Conta {
     public ContaPoupancao(String numeroConta, String titularConta, Double saldo, Double taxaJuros) {
         super(numeroConta, titularConta, saldo, taxaJuros);
     }
+
+    @Override
+    public String toString() {
+        return "tipo: conta poupanca, numero: " + this.getNumeroConta() + ", nome: " + this.getTitularConta() + ", saldo: R$" + this.getSaldo();
+    }
 }
