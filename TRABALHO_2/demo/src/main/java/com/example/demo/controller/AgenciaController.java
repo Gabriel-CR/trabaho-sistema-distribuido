@@ -30,28 +30,28 @@ public class AgenciaController {
         var response = agenciaService.read();
         return ResponseEntity.ok().body(response);
     }
-//
-//    @PutMapping("/update/{id}")
-//    public ResponseEntity update(@PathVariable Integer id, @RequestBody Banco banco) {
-//        try {
-//            var response = agenciaService.update(id, banco);
-//            return ResponseEntity.ok().body(response);
-//        } catch (Exception e) {
-//            return ResponseEntity
-//                    .status(HttpStatus.NOT_FOUND)
-//                    .body("Bancom com o id %d não encontrado".formatted(id));
-//        }
-//    }
-//
-//    @DeleteMapping("/delete/{id}")
-//    public ResponseEntity delete(@PathVariable Integer id) {
-//        try {
-//            agenciaService.delete(id);
-//            return ResponseEntity.ok().body("Banco removido com sucesso");
-//        } catch (Exception e) {
-//            return ResponseEntity
-//                    .status(HttpStatus.NOT_FOUND)
-//                    .body("Banco com o id %d não encontrado".formatted(id));
-//        }
-//    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity update(@PathVariable Integer id, @RequestBody Agencia agencia) {
+        try {
+            var response = agenciaService.update(id, agencia);
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity delete(@PathVariable Integer id) {
+        try {
+            agenciaService.delete(id);
+            return ResponseEntity.ok().body("Agência removida com sucesso");
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Agencia com o id %d não encontrado".formatted(id));
+        }
+    }
 }

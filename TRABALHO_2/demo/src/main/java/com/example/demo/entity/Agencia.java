@@ -11,7 +11,5 @@ public class Agencia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private int numero;
-    @ManyToOne
-    @JoinColumn(name = "banco_id", referencedColumnName = "id")
-    private Banco banco;
+    private Integer idBanco;
 }
