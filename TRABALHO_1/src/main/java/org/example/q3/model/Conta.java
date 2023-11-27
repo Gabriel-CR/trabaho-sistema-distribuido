@@ -51,7 +51,7 @@ public class Conta implements OperacoesBancarias {
 
     @Override
     public void calcularJuros() {
-        this.saldo += this.saldo * (this.taxaJuros / 100);
+        return;
     }
 
     @Override
@@ -74,5 +74,13 @@ public class Conta implements OperacoesBancarias {
 
     public Double getSaldo() {
         return saldo;
+    }
+
+    public Double getTaxaJuros() {
+        return taxaJuros;
+    }
+
+    public void setSaldo(Double saldo) {
+        this.saldo = saldo;
     }
 }

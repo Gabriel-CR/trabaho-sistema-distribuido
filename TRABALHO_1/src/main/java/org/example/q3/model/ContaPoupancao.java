@@ -13,4 +13,10 @@ public class ContaPoupancao extends Conta {
     public String toString() {
         return "tipo: conta poupanca, numero: " + this.getNumeroConta() + ", nome: " + this.getTitularConta() + ", saldo: R$" + this.getSaldo();
     }
+
+
+    @Override
+    public void calcularJuros(){
+        this.setSaldo(this.getSaldo() + ( 1 + this.getTaxaJuros()/100));
+    }
 }

@@ -14,4 +14,9 @@ public class ContaCorrente extends Conta {
     public String toString() {
         return "tipo: conta corrente, numero: " + this.getNumeroConta() + ", nome: " + this.getTitularConta() + ", saldo: R$" + this.getSaldo();
     }
+
+    @Override
+    public void calcularJuros(){
+        return ;
+    }
 }
