@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.DepositoDTO;
 import com.example.demo.entity.Banco;
 import com.example.demo.service.BancoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +54,25 @@ public class BancoController {
                     .status(HttpStatus.NOT_FOUND)
                     .body("Banco com o id %d não encontrado".formatted(id));
         }
+    }
+
+    @PostMapping("/deposito/{id}")
+    public ResponseEntity deposito(@PathVariable Integer id, @RequestBody DepositoDTO depositoDTO) {
+        var banco = bancoService.readById(id);
+
+        if (banco.isPresent()) {
+            try {
+                bancoService.deposito(depositoDTO);
+                return ResponseEntity.ok().body("Depósito realizado com sucesso");
+            } catch (Exception e) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("Erro ao realizar depósito\n" + e.getMessage());
+            }
+        }
+
+        return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Banco com o id %d não encontrado".formatted(id));
     }
 }

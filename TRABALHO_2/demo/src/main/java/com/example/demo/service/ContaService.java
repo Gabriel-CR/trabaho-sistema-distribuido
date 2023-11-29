@@ -6,6 +6,7 @@ import com.example.demo.repository.ContaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ContaService {
@@ -35,6 +36,10 @@ public class ContaService {
         return contaRepository.findAll();
     }
 
+    public Optional<Conta> readById(Integer id) {
+        return contaRepository.findById(id);
+    }
+
     public Conta update(Integer numeroConta, Conta conta) {
         contaRepository.findById(numeroConta).ifPresentOrElse((existingConta) -> {
             agenciaRepository.findById(conta.getIdAgencia()).ifPresentOrElse((existingAgencia) -> {
@@ -44,14 +49,14 @@ public class ContaService {
                 try {
                     throw new Exception("Agencia com o id %d não existe".formatted(conta.getIdAgencia()));
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    throw new RuntimeException();
                 }
             });
         }, () -> {
             try {
                 throw new Exception("Conta com o número %d não existe".formatted(numeroConta));
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException();
             }
         });
 
