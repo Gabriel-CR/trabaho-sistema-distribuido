@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.DepositoDTO;
+import com.example.demo.dto.*;
 import com.example.demo.entity.Agencia;
 import com.example.demo.repository.AgenciaRepository;
 import com.example.demo.repository.BancoRepository;
@@ -95,6 +95,141 @@ public class AgenciaService {
         }, () -> {
             try {
                 throw new Exception("Conta " + depositoDTO.numConta() + " não encontrada");
+            } catch (Exception e) {
+                throw new RuntimeException();
+            }
+        });
+    }
+
+    public Double saldo(SaldoDTO saldoDTO) {
+        var conta = contaService.readById(saldoDTO.numConta());
+
+        if(conta.isPresent()){
+            try{
+                return conta.get().getSaldo();
+            }catch (Exception e) {
+                try {
+                    throw new Exception("Conta com o id %d não encontrada".formatted(saldoDTO.numConta()));
+                } catch (Exception ex) {
+                    throw new RuntimeException();
+                }
+            }
+        }
+
+        try {
+            throw new Exception("Conta " + saldoDTO.numConta() + " não encontrada");
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+    }
+
+    public void saque(SaqueDTO saqueDTO) {
+        var conta = contaService.readById(saqueDTO.numConta());
+
+        conta.ifPresentOrElse((present) -> {
+            try {
+                present.setSaldo(present.getSaldo() - saqueDTO.valor());
+                contaService.update(present.getNumeroConta(), present);
+            } catch (Exception e) {
+                try {
+                    throw new Exception("Conta com o id %d não encontrada".formatted(saqueDTO.numConta()));
+                } catch (Exception ex) {
+                    throw new RuntimeException();
+                }
+            }
+        }, () -> {
+            try {
+                throw new Exception("Conta " + saqueDTO.numConta() + " não encontrada");
+            } catch (Exception e) {
+                throw new RuntimeException();
+            }
+        });
+    }
+
+    public Double taxaJuros(TaxaJurosDTO taxaJurosDTO) {
+        var conta = contaService.readById(taxaJurosDTO.numConta());
+
+        if(conta.isPresent()){
+            try{
+                return conta.get().getTaxaJuros();
+            }catch (Exception e) {
+                try {
+                    throw new Exception("Conta com o id %d não encontrada".formatted(taxaJurosDTO.numConta()));
+                } catch (Exception ex) {
+                    throw new RuntimeException();
+                }
+            }
+        }
+
+        try {
+            throw new Exception("Conta " + taxaJurosDTO.numConta() + " não encontrada");
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+    }
+
+    public void calcularJuros(CalcularJurosDTO calcularJurosDTO) {
+        var conta = contaService.readById(calcularJurosDTO.numConta());
+
+        conta.ifPresentOrElse((present) -> {
+            try {
+                present.setSaldo(present.getSaldo() + (present.getSaldo() * present.getTaxaJuros()/100));
+                contaService.update(calcularJurosDTO.numConta(), present);
+            } catch (Exception e) {
+                try {
+                    throw new Exception("Conta com o id %d não encontrada".formatted(calcularJurosDTO.numConta()));
+                } catch (Exception ex) {
+                    throw new RuntimeException();
+                }
+            }
+        }, () -> {
+            try {
+                throw new Exception("Conta " + calcularJurosDTO.numConta() + " não encontrada");
+            } catch (Exception e) {
+                throw new RuntimeException();
+            }
+        });
+    }
+
+    public void transferencia(TransferenciaDTO transferenciaDTO) {
+        var contaOrigem = contaService.readById(transferenciaDTO.numContaOrigem());
+        var contaDestino = contaService.readById(transferenciaDTO.numContaDestino());
+
+        contaOrigem.ifPresentOrElse((presentOrigin) -> {
+            try {
+                contaDestino.ifPresentOrElse((presentDestiny) -> {
+                    try {
+
+                        presentOrigin.setSaldo(presentOrigin.getSaldo() - transferenciaDTO.valor());
+                        presentDestiny.setSaldo(presentDestiny.getSaldo() + transferenciaDTO.valor());
+
+                        contaService.update(transferenciaDTO.numContaOrigem(), presentOrigin);
+                        contaService.update(transferenciaDTO.numContaDestino(), presentDestiny);
+                    } catch (Exception e) {
+                        try {
+                            throw new Exception("Conta com o id %d não encontrada".formatted(transferenciaDTO.numContaDestino()));
+                        } catch (Exception ex) {
+                            throw new RuntimeException();
+                        }
+                    }
+                }, () -> {
+                    try {
+                        throw new Exception("Conta " + transferenciaDTO.numContaDestino() + " não encontrada");
+                    } catch (Exception e) {
+                        throw new RuntimeException();
+                    }
+                });
+
+            } catch (Exception e) {
+                try {
+                    throw new Exception("Conta com o id %d não encontrada".formatted(transferenciaDTO.numContaOrigem()));
+                } catch (Exception ex) {
+                    throw new RuntimeException();
+                }
+            }
+        }, () -> {
+            try {
+                throw new Exception("Conta " + transferenciaDTO.numContaDestino() + " não encontrada");
             } catch (Exception e) {
                 throw new RuntimeException();
             }
