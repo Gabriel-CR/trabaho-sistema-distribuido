@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.*;
 import com.example.demo.entity.Agencia;
+import com.example.demo.entity.Conta;
 import com.example.demo.repository.AgenciaRepository;
 import com.example.demo.repository.BancoRepository;
 import org.springframework.stereotype.Service;
@@ -128,8 +129,13 @@ public class AgenciaService {
 
         conta.ifPresentOrElse((present) -> {
             try {
-                present.setSaldo(present.getSaldo() - saqueDTO.valor());
-                contaService.update(present.getNumeroConta(), present);
+                Double valorSacado = present.getSaldo() - saqueDTO.valor();
+                if (valorSacado >= 0) {
+                    present.setSaldo(valorSacado);
+                    contaService.update(present.getNumeroConta(), present);
+                } else {
+                    throw new Exception("Valor insuficiente");
+                }
             } catch (Exception e) {
                 try {
                     throw new Exception("Conta com o id %d não encontrada".formatted(saqueDTO.numConta()));
@@ -168,27 +174,19 @@ public class AgenciaService {
         }
     }
 
-    public void calcularJuros(CalcularJurosDTO calcularJurosDTO) {
+    public Double calcularJuros(CalcularJurosDTO calcularJurosDTO) throws Exception {
         var conta = contaService.readById(calcularJurosDTO.numConta());
 
-        conta.ifPresentOrElse((present) -> {
-            try {
-                present.setSaldo(present.getSaldo() + (present.getSaldo() * present.getTaxaJuros()/100));
-                contaService.update(calcularJurosDTO.numConta(), present);
-            } catch (Exception e) {
-                try {
-                    throw new Exception("Conta com o id %d não encontrada".formatted(calcularJurosDTO.numConta()));
-                } catch (Exception ex) {
-                    throw new RuntimeException();
-                }
-            }
-        }, () -> {
-            try {
-                throw new Exception("Conta " + calcularJurosDTO.numConta() + " não encontrada");
-            } catch (Exception e) {
-                throw new RuntimeException();
-            }
-        });
+        if (conta.isPresent()) {
+            Double valorAtualizado = conta.get().getSaldo() * (1 + conta.get().getTaxaJuros()/100);
+            var c = new Conta(conta.get());
+            c.setSaldo(valorAtualizado);
+
+            contaService.update(c.getNumeroConta(), c);
+            return conta.get().getSaldo();
+        } else {
+            throw new Exception("Conta não encontrada");
+        }
     }
 
     public void transferencia(TransferenciaDTO transferenciaDTO) {

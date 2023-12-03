@@ -149,57 +149,38 @@ public class BancoService {
         }
     }
 
-    public void calcularJuros(CalcularJurosDTO calcularJurosDTO) {
+    public Double calcularJuros(CalcularJurosDTO calcularJurosDTO) throws Exception {
         var agencia = agenciaService.readById(calcularJurosDTO.numAgencia());
 
-        agencia.ifPresentOrElse((present) -> {
+        if (agencia.isPresent()) {
             try {
-                agenciaService.calcularJuros(calcularJurosDTO);
+                return agenciaService.calcularJuros(calcularJurosDTO);
             } catch (Exception e) {
                 try {
-                    throw new Exception("Erro ao realizar calculo dos juros");
+                    throw new Exception("Erro ao calcular taxa de juros");
                 } catch (Exception ex) {
-                    throw new RuntimeException();
+                    throw new RuntimeException(ex);
                 }
             }
-        }, () -> {
-            try {
-                throw new Exception("Agencia " + calcularJurosDTO.numAgencia() + " não encontrada");
-            } catch (Exception e) {
-                throw new RuntimeException();
-            }
-        });
-    }
-
-    public void transferencia(TransferenciaDTO transferenciaDTO) {
-        var agenciaOrigem = agenciaService.readById(transferenciaDTO.numAgenciaOrigem());
-        var agenciaDestino = agenciaService.readById(transferenciaDTO.numAgenciaDestino());
-
-        if(agenciaOrigem.isPresent() && agenciaDestino.isPresent()){
-            try {
-                agenciaService.transferencia(transferenciaDTO);
-            } catch (Exception e) {
-                try {
-                    throw new Exception("Erro ao realizar transferencia");
-                } catch (Exception ex) {
-                    throw new RuntimeException();
-                }
-            }
-        }else if(!agenciaOrigem.isPresent()){
-            try {
-                throw new Exception("Agencia " + transferenciaDTO.numAgenciaOrigem() + " não encontrada");
-            } catch (Exception e) {
-                throw new RuntimeException();
-            }
-
-        }else{
-            try {
-                throw new Exception("Agencia " + transferenciaDTO.numAgenciaDestino() + " não encontrada");
-            } catch (Exception e) {
-                throw new RuntimeException();
-            }
+        } else {
+            throw new Exception("Agência com o id %d não encontrada".formatted(calcularJurosDTO.numAgencia()));
         }
     }
 
+    public Double transferencia(TransferenciaDTO transferenciaDTO) throws Exception {
+        var agenciaOrigem = agenciaService.readById(transferenciaDTO.numAgenciaOrigem());
+        var agenciaDestino = agenciaService.readById(transferenciaDTO.numAgenciaDestino());
 
+        if (agenciaOrigem.isPresent() && agenciaDestino.isPresent()) {
+            var saque = new SaqueDTO(transferenciaDTO.numAgenciaOrigem(), transferenciaDTO.numContaOrigem(), transferenciaDTO.valor());
+            var deposito = new DepositoDTO(transferenciaDTO.numAgenciaDestino(), transferenciaDTO.numContaDestino(), transferenciaDTO.valor());
+
+            agenciaService.saque(saque);
+            agenciaService.deposito(deposito);
+
+            return transferenciaDTO.valor();
+        } else {
+            throw new Exception("Uma das agências não pode ser encontrada");
+        }
+    }
 }

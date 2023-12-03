@@ -15,4 +15,16 @@ public class Conta {
     private Double taxaJuros;
     private String tipo;
     private Integer idAgencia;
+
+    public Conta(Conta conta) {
+        this.numeroConta = conta.getNumeroConta();
+        this.titularConta = conta.getTitularConta();
+        this.saldo = conta.getSaldo();
+        this.taxaJuros = conta.getTaxaJuros();
+        this.tipo = conta.getTipo();
+        this.idAgencia = conta.getIdAgencia();
+    }
+
+    public Conta() {
+    }
 }

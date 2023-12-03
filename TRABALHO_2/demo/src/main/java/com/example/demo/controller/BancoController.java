@@ -83,8 +83,9 @@ public class BancoController {
 
         if(banco.isPresent()){
             try{
-                var response = bancoService.saldo(saldoDTO);
-                return ResponseEntity.ok().body(response);
+                Double saldo = bancoService.saldo(saldoDTO);
+                String saldoFormatado = String.format("%.2f", saldo);
+                return ResponseEntity.ok().body("Seu saldo é de R$" + saldoFormatado);
 
             }catch (Exception e) {
                 return ResponseEntity
@@ -126,9 +127,9 @@ public class BancoController {
 
         if(banco.isPresent()){
             try{
-                var response = bancoService.taxaJuros(taxaJurosDTO);
-                return ResponseEntity.ok().body(response);
-
+                Double taxaJuros = bancoService.taxaJuros(taxaJurosDTO);
+                String taxaJurosFormatado = String.format("%.2f", taxaJuros);
+                return ResponseEntity.ok().body("Sua taxa de juros é de " + taxaJurosFormatado + "%");
             }catch (Exception e) {
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
@@ -141,16 +142,15 @@ public class BancoController {
                 .body("Banco com o id %d não encontrado".formatted(id));
     }
 
-
     @PostMapping("calcularjuros/{id}")
     public ResponseEntity calcularJuros(@PathVariable Integer id, @RequestBody CalcularJurosDTO calcularJurosDTO){
         var banco = bancoService.readById(id);
 
         if(banco.isPresent()){
             try{
-                bancoService.calcularJuros(calcularJurosDTO);
-                return ResponseEntity.ok().body("Calculo dos juros realizado com sucesso");
-
+                Double valorAtualizado = bancoService.calcularJuros(calcularJurosDTO);
+                String valorAtualizadoFormatado = String.format("%.2f", valorAtualizado);
+                return ResponseEntity.ok().body("Seu saldo atualizado é de R$" + valorAtualizadoFormatado);
             }catch (Exception e) {
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
@@ -167,15 +167,16 @@ public class BancoController {
     public ResponseEntity transferencia(@PathVariable Integer id, @RequestBody TransferenciaDTO transferenciaDTO){
         var banco = bancoService.readById(id);
 
-        if(banco.isPresent()){
-            try{
-                bancoService.transferencia(transferenciaDTO);
-                return ResponseEntity.ok().body("Transferencia realizada com sucesso");
-
-            }catch (Exception e) {
+        if (banco.isPresent()) {
+            Double valorTransferido = null;
+            try {
+                valorTransferido = bancoService.transferencia(transferenciaDTO);
+                String valorTransferidoFormatado = String.format("%.2f", valorTransferido);
+                return ResponseEntity.ok().body("Transferência de R$" + valorTransferidoFormatado + " realizada com sucesso");
+            } catch (Exception e) {
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
-                        .body("Erro ao realizar transferencia\n" + e.getMessage());
+                        .body("Erro ao realizar transferencia");
             }
         }
 
@@ -183,6 +184,4 @@ public class BancoController {
                 .status(HttpStatus.NOT_FOUND)
                 .body("Banco com o id %d não encontrado".formatted(id));
     }
-
-
 }
