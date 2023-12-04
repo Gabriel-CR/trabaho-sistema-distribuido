@@ -56,7 +56,7 @@ public class BancoController {
         }
     }
 
-    @PostMapping("/deposito/{id}")
+    @PutMapping("/deposito/{id}")
     public ResponseEntity deposito(@PathVariable Integer id, @RequestBody DepositoDTO depositoDTO) {
         var banco = bancoService.readById(id);
 
@@ -77,7 +77,7 @@ public class BancoController {
     }
 
 
-    @PostMapping("saldo/{id}")
+    @GetMapping("saldo/{id}")
     public ResponseEntity saldo (@PathVariable Integer id, @RequestBody SaldoDTO saldoDTO){
         var banco = bancoService.readById(id);
 
@@ -99,7 +99,7 @@ public class BancoController {
                 .body("Banco com o id %d não encontrado".formatted(id));
     }
 
-    @PostMapping("saque/{id}")
+    @PutMapping("saque/{id}")
     public ResponseEntity saque(@PathVariable Integer id, @RequestBody SaqueDTO saqueDTO){
         var banco = bancoService.readById(id);
 
@@ -121,7 +121,7 @@ public class BancoController {
     }
 
 
-    @PostMapping("taxajuros/{id}")
+    @GetMapping("taxajuros/{id}")
     public ResponseEntity taxaJuros (@PathVariable Integer id, @RequestBody TaxaJurosDTO taxaJurosDTO){
         var banco = bancoService.readById(id);
 
@@ -142,7 +142,7 @@ public class BancoController {
                 .body("Banco com o id %d não encontrado".formatted(id));
     }
 
-    @PostMapping("calcularjuros/{id}")
+    @PutMapping("calcularjuros/{id}")
     public ResponseEntity calcularJuros(@PathVariable Integer id, @RequestBody CalcularJurosDTO calcularJurosDTO){
         var banco = bancoService.readById(id);
 
@@ -163,7 +163,7 @@ public class BancoController {
                 .body("Banco com o id %d não encontrado".formatted(id));
     }
 
-    @PostMapping("transferir/{id}")
+    @PutMapping("transferir/{id}")
     public ResponseEntity transferencia(@PathVariable Integer id, @RequestBody TransferenciaDTO transferenciaDTO){
         var banco = bancoService.readById(id);
 
